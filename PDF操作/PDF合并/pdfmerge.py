@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
+'''
+   #文件名：pdfmerge.py
+   本脚本用来合并pdf文件，输出的pdf文件按输入的pdf文件名生成书签
+   使用示例如下：
+   python pdfmerge.py -p "D:\pdf-files" -o "merged-out.pdf" -b True'
 
+   示例说明：
+   要合并的pdf文件所在的路径： D:\pdf-files
+   合并后的pdf文件的输出文件名：merged-out.pdf
+   是否从pdf文件中导入书签的值：True
+'''
 import os, sys, codecs
 from argparse import ArgumentParser, RawTextHelpFormatter
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
