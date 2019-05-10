@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1025</width>
-    <height>465</height>
+    <width>1213</width>
+    <height>708</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>690</x>
       <y>10</y>
-      <width>471</width>
-      <height>431</height>
+      <width>511</width>
+      <height>531</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -34,8 +34,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>469</width>
-       <height>429</height>
+       <width>509</width>
+       <height>529</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_0">
@@ -61,8 +61,8 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>451</width>
-        <height>381</height>
+        <width>481</width>
+        <height>481</height>
        </rect>
       </property>
       <property name="text">
@@ -74,10 +74,10 @@
    <widget class="QScrollArea" name="scrollArea_2">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>10</x>
       <y>10</y>
-      <width>511</width>
-      <height>281</height>
+      <width>671</width>
+      <height>671</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -88,8 +88,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>509</width>
-       <height>279</height>
+       <width>669</width>
+       <height>669</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_1">
@@ -114,9 +114,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
-        <width>491</width>
-        <height>201</height>
+        <y>40</y>
+        <width>651</width>
+        <height>621</height>
        </rect>
       </property>
      </widget>
@@ -125,8 +125,8 @@
    <widget class="QScrollArea" name="scrollArea_3">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>310</y>
+      <x>690</x>
+      <y>550</y>
       <width>341</width>
       <height>131</height>
      </rect>
@@ -179,8 +179,8 @@
    <widget class="QScrollArea" name="scrollArea_4">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>310</y>
+      <x>1040</x>
+      <y>550</y>
       <width>161</width>
       <height>131</height>
      </rect>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UI.ui'
+# Form implementation generated from reading ui file 'UI2.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -16,21 +16,20 @@ class Ui_MainWindow(object):
 
     def __init__(self):
         self.RowLength = 0
-        self.Data = []
+        self.Data = [['文件名称', '录入时间', '车牌号码', '车牌类型', '识别耗时', '车牌信息']]
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        # MainWindow.resize(1025, 465)
-        MainWindow.setFixedSize(1025, 465)  # 设置窗体固定大小
+        MainWindow.resize(1213, 670)
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(10, 10, 471, 431))
+        self.scrollArea.setGeometry(QtCore.QRect(690, 10, 511, 491))
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 469, 429))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 509, 489))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.label_0 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         self.label_0.setGeometry(QtCore.QRect(10, 10, 111, 20))
@@ -39,15 +38,15 @@ class Ui_MainWindow(object):
         self.label_0.setFont(font)
         self.label_0.setObjectName("label_0")
         self.label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.label.setGeometry(QtCore.QRect(10, 40, 451, 381))
+        self.label.setGeometry(QtCore.QRect(10, 40, 481, 441))
         self.label.setObjectName("label")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.scrollArea_2 = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea_2.setGeometry(QtCore.QRect(500, 10, 511, 281))
+        self.scrollArea_2.setGeometry(QtCore.QRect(10, 10, 671, 631))
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_1 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 509, 279))
+        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 669, 629))
         self.scrollAreaWidgetContents_1.setObjectName("scrollAreaWidgetContents_1")
         self.label_1 = QtWidgets.QLabel(self.scrollAreaWidgetContents_1)
         self.label_1.setGeometry(QtCore.QRect(10, 10, 111, 20))
@@ -56,15 +55,17 @@ class Ui_MainWindow(object):
         self.label_1.setFont(font)
         self.label_1.setObjectName("label_1")
         self.tableWidget = QtWidgets.QTableWidget(self.scrollAreaWidgetContents_1)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 491, 231))
+        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 651, 581))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(5)
-        self.tableWidget.setColumnWidth(0, 130)  # 设置1列的宽度
-        self.tableWidget.setColumnWidth(1, 65)  # 设置2列的宽度
-        self.tableWidget.setColumnWidth(2, 75)  # 设置3列的宽度
-        self.tableWidget.setColumnWidth(3, 65)  # 设置4列的宽度
-        self.tableWidget.setColumnWidth(4, 153)  # 设置5列的宽度
-        self.tableWidget.setHorizontalHeaderLabels(["录入时间", "识别耗时", "车牌号码", "车牌类型", "车牌信息"])
+        self.tableWidget.setColumnCount(6)
+        self.tableWidget.setColumnWidth(0, 140)  # 设置1列的宽度
+        self.tableWidget.setColumnWidth(1, 130)  # 设置2列的宽度
+        self.tableWidget.setColumnWidth(2, 65)  # 设置3列的宽度
+        self.tableWidget.setColumnWidth(3, 75)  # 设置4列的宽度
+        self.tableWidget.setColumnWidth(4, 65)  # 设置5列的宽度
+        self.tableWidget.setColumnWidth(5, 174)  # 设置6列的宽度
+
+        self.tableWidget.setHorizontalHeaderLabels(["图片名称", "录入时间", "识别耗时", "车牌号码", "车牌类型", "车牌信息"])
         self.tableWidget.setRowCount(self.RowLength)
         self.tableWidget.verticalHeader().setVisible(False)  # 隐藏垂直表头)
         self.tableWidget.setStyleSheet("selection-background-color:pink")
@@ -72,7 +73,7 @@ class Ui_MainWindow(object):
         self.tableWidget.raise_()
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_1)
         self.scrollArea_3 = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea_3.setGeometry(QtCore.QRect(500, 310, 341, 131))
+        self.scrollArea_3.setGeometry(QtCore.QRect(690, 510, 341, 131))
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollArea_3.setObjectName("scrollArea_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
@@ -89,7 +90,7 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName("label_3")
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
         self.scrollArea_4 = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea_4.setGeometry(QtCore.QRect(850, 310, 161, 131))
+        self.scrollArea_4.setGeometry(QtCore.QRect(1040, 510, 161, 131))
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollArea_4.setObjectName("scrollArea_4")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
@@ -144,17 +145,18 @@ class Ui_MainWindow(object):
         result = PR.VLPR(path)
         return result
 
-    def __show(self, result):
+    def __show(self, result, FileName):
         # 显示表格
         self.RowLength = self.RowLength + 1
-        if self.RowLength > 6:
-            self.tableWidget.setColumnWidth(4, 137)  # 设置4列的宽度
+        if self.RowLength > 19:
+            self.tableWidget.setColumnWidth(5, 157)
         self.tableWidget.setRowCount(self.RowLength)
-        self.tableWidget.setItem(self.RowLength - 1, 0, QTableWidgetItem(result['InputTime']))
-        self.tableWidget.setItem(self.RowLength - 1, 1, QTableWidgetItem(str(result['UseTime']) + '秒'))
-        self.tableWidget.setItem(self.RowLength - 1, 2, QTableWidgetItem(result['Number']))
-        self.tableWidget.setItem(self.RowLength - 1, 3, QTableWidgetItem(result['Type']))
-        self.tableWidget.setItem(self.RowLength - 1, 4, QTableWidgetItem(result['From']))
+        self.tableWidget.setItem(self.RowLength - 1, 0, QTableWidgetItem(FileName))
+        self.tableWidget.setItem(self.RowLength - 1, 1, QTableWidgetItem(result['InputTime']))
+        self.tableWidget.setItem(self.RowLength - 1, 2, QTableWidgetItem(str(result['UseTime']) + '秒'))
+        self.tableWidget.setItem(self.RowLength - 1, 3, QTableWidgetItem(result['Number']))
+        self.tableWidget.setItem(self.RowLength - 1, 4, QTableWidgetItem(result['Type']))
+        self.tableWidget.setItem(self.RowLength - 1, 5, QTableWidgetItem(result['From']))
 
         # 显示识别到的车牌位置
         size = (int(self.label_3.width()), int(self.label_3.height()))
@@ -167,7 +169,7 @@ class Ui_MainWindow(object):
     def __writexls(self, DATA, path):
         wb = xlwt.Workbook();
         ws = wb.add_sheet('Data');
-        DATA.insert(0, ['录入时间', '车牌号码', '车牌类型', '识别耗时', '车牌信息', '文件名称'])
+        # DATA.insert(0, ['文件名称','录入时间', '车牌号码', '车牌类型', '识别耗时', '车牌信息'])
         for i, Data in enumerate(DATA):
             for j, data in enumerate(Data):
                 ws.write(i, j, data)
@@ -176,7 +178,7 @@ class Ui_MainWindow(object):
 
     def __writecsv(self, DATA, path):
         f = open(path, 'w')
-        DATA.insert(0, ['录入时间', '车牌号码', '车牌类型', '识别耗时', '车牌信息', '文件名称'])
+        # DATA.insert(0, ['文件名称','录入时间', '车牌号码', '车牌类型', '识别耗时', '车牌信息'])
         for data in DATA:
             f.write((',').join(data) + '\n')
         f.close()
@@ -203,9 +205,9 @@ class Ui_MainWindow(object):
         result = self.__vlpr(path)
         if result is not None:
             self.Data.append(
-                [result['InputTime'], result['Number'], result['Type'], str(result['UseTime']) + '秒', result['From'],
-                 filename])
-            self.__show(result)
+                [filename, result['InputTime'], result['Number'], result['Type'], str(result['UseTime']) + '秒',
+                 result['From']])
+            self.__show(result, filename)
         else:
             QMessageBox.warning(None, "Error", "无法识别此图像！", QMessageBox.Yes)
 
