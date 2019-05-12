@@ -157,17 +157,17 @@ class PlateRecognition():
                 'S': ['湖北省', '随州市']
             },
             '晋': {
-                ' A': ['山西省', '太原市'],
-                ' B': ['山西省', '大同市'],
-                ' C': ['山西省', '阳泉市'],
-                ' D': ['山西省', '长治市'],
-                ' E': ['山西省', '晋城市'],
-                ' F': ['山西省', '朔州市'],
-                ' H': ['山西省', '忻州市'],
-                ' J': ['山西省', '吕梁市'],
-                ' K': ['山西省', '晋中市'],
-                ' L': ['山西省', '临汾市'],
-                ' M': ['山西省', '运城市']
+                'A': ['山西省', '太原市'],
+                'B': ['山西省', '大同市'],
+                'C': ['山西省', '阳泉市'],
+                'D': ['山西省', '长治市'],
+                'E': ['山西省', '晋城市'],
+                'F': ['山西省', '朔州市'],
+                'H': ['山西省', '忻州市'],
+                'J': ['山西省', '吕梁市'],
+                'K': ['山西省', '晋中市'],
+                'L': ['山西省', '临汾市'],
+                'M': ['山西省', '运城市']
             },
             '吉': {
                 'A': ['吉林省', '长春市'],
@@ -381,9 +381,10 @@ class PlateRecognition():
                 'A': ['北京市'],
                 'B': ['北京市'],
                 'C': ['北京市'],
-                'E': ['北京市'],
+                'D': ['北京市'],
                 'E': ['北京市'],
                 'F': ['北京市'],
+                'G': ['北京市'],
                 'H': ['北京市'],
                 'J': ['北京市'],
                 'K': ['北京市'],
@@ -521,7 +522,10 @@ class PlateRecognition():
                 'B': ['天津市'],
                 'C': ['天津市'],
                 'D': ['天津市'],
-                'E': ['天津市']
+                'E': ['天津市'],
+                'F': ['天津市'],
+                'G': ['天津市'],
+                'H': ['天津市']
             }
         }  # 字母所代表的地区
         self.cardtype = {
@@ -552,7 +556,7 @@ class PlateRecognition():
         if point[1] < 0:
             point[1] = 0
 
-    # 根据设定的阈值和图片直方图，找出波峰，用于分隔字符
+    # 利用投影法，根据设定的阈值和图片直方图，找出波峰，用于分隔字符
     def __find_waves(self, threshold, histogram):
         up_point = -1  # 上升点
         is_peak = False
@@ -718,13 +722,14 @@ class PlateRecognition():
 
         if pic_width > self.MAX_WIDTH:
             resize_rate = self.MAX_WIDTH / pic_width
-            img = cv2.resize(img, (self.MAX_WIDTH, int(pic_hight * resize_rate)), interpolation=cv2.INTER_AREA)
+            img = cv2.resize(img, (self.MAX_WIDTH, int(pic_hight * resize_rate)),
+                             interpolation=cv2.INTER_AREA)  # 图片分辨率调整
         # cv2.imshow('Image', img)
 
         blur = self.cfg["blur"]
         # 高斯去噪
         if blur > 0:
-            img = cv2.GaussianBlur(img, (blur, blur), 0)  # 图片分辨率调整
+            img = cv2.GaussianBlur(img, (blur, blur), 0)
         oldimg = img
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # cv2.imshow('GaussianBlur', img)
@@ -769,7 +774,7 @@ class PlateRecognition():
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)
             # oldimg = cv2.drawContours(oldimg, [box], 0, (0, 0, 255), 2)
-            # cv2.imshow("oldimg",oldimg )
+            # cv2.imshow("Test",oldimg )
             # print(car_contours)
 
         # 矩形区域可能是倾斜的矩形，需要矫正，以便使用颜色定位
@@ -817,14 +822,20 @@ class PlateRecognition():
                 self.__point_limit(new_left_point)
                 card_img = dst[int(right_point[1]):int(heigth_point[1]), int(new_left_point[0]):int(right_point[0])]
                 card_imgs.append(card_img)
-        # cv2.imshow("card", card_imgs[2])
+        # cv2.imshow("card", card_imgs[0])
 
         # #____开始使用颜色定位，排除不是车牌的矩形，目前只识别蓝、绿、黄车牌
         colors = []
         for card_index, card_img in enumerate(card_imgs):
             green = yellow = blue = black = white = 0
-            card_img_hsv = cv2.cvtColor(card_img, cv2.COLOR_BGR2HSV)
-            # 有转换失败的可能，原因来自于上面矫正矩形出错
+            try:
+                # 有转换失败的可能，原因来自于上面矫正矩形出错
+                card_img_hsv = cv2.cvtColor(card_img, cv2.COLOR_BGR2HSV)
+            except:
+                print('BGR转HSV失败')
+                card_imgs = colors = None
+                return card_imgs, colors
+
             if card_img_hsv is None:
                 continue
             row_num, col_num = card_img_hsv.shape[:2]
@@ -901,6 +912,7 @@ class PlateRecognition():
             card_imgs[card_index] = card_img[yl:yh, xl:xr] \
                 if color != "green" or yl < (yh - yl) // 4 else card_img[yl - (yh - yl) // 4:yh, xl:xr]
         # cv2.imshow("result", card_imgs[0])
+        # cv2.imwrite('1.jpg', card_imgs[0])
         # print('颜色识别结果：' + colors[0])
         return card_imgs, colors
 
@@ -1022,8 +1034,15 @@ class PlateRecognition():
                         # print(charactor)
                     # 判断最后一个数是否是车牌边缘，假设车牌边缘被认为是1
                     if charactor == "1" and i == len(part_cards) - 1:
-                        if part_card_old.shape[0] / part_card_old.shape[1] >= 7:  # 1太细，认为是边缘
-                            continue
+                        if color == 'blue' and len(part_cards) > 7:
+                            if part_card_old.shape[0] / part_card_old.shape[1] >= 7:  # 1太细，认为是边缘
+                                continue
+                        elif color == 'blue' and len(part_cards) > 7:
+                            if part_card_old.shape[0] / part_card_old.shape[1] >= 7:  # 1太细，认为是边缘
+                                continue
+                        elif color == 'green' and len(part_cards) > 8:
+                            if part_card_old.shape[0] / part_card_old.shape[1] >= 7:  # 1太细，认为是边缘
+                                continue
                     predict_result.append(charactor)
                 roi = card_img
                 card_color = color
@@ -1036,42 +1055,54 @@ class PlateRecognition():
         start = time.time()
         self.train_svm()
         card_imgs, colors = self.__preTreatment(car_pic)
-        predict_result, roi, card_color = self.__identification(card_imgs, colors)
-        if predict_result != []:
-            result['UseTime'] = round((time.time() - start), 2)
-            result['InputTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
-            result['Type'] = self.cardtype[card_color]
-            result['List'] = predict_result
-            result['Number'] = ''.join(predict_result[:2]) + '·' + ''.join(predict_result[2:])
-            result['Picture'] = roi
-            result['From'] = ''.join(self.Prefecture[result['List'][0]][result['List'][1]])
-            return result
+        if card_imgs is None:
+            return
         else:
-            return None
+            predict_result, roi, card_color = self.__identification(card_imgs, colors)
+            if predict_result != []:
+                result['UseTime'] = round((time.time() - start), 2)
+                result['InputTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+                result['Type'] = self.cardtype[card_color]
+                result['List'] = predict_result
+                result['Number'] = ''.join(predict_result[:2]) + '·' + ''.join(predict_result[2:])
+                result['Picture'] = roi
+                try:
+                    result['From'] = ''.join(self.Prefecture[result['List'][0]][result['List'][1]])
+                except:
+                    result['From'] = '未知'
+                return result
+            else:
+                return None
 
     def VLPR(self, car_pic):
         result = {}
         start = time.time()
         self.train_svm()
         card_imgs, colors = self.__preTreatment(car_pic)
-        predict_result, roi, card_color = self.__identification(card_imgs, colors)
-        if predict_result != []:
-            result['UseTime'] = round((time.time() - start), 2)
-            result['InputTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
-            result['Type'] = self.cardtype[card_color]
-            result['List'] = predict_result
-            result['Number'] = ''.join(predict_result[:2]) + '·' + ''.join(predict_result[2:])
-            result['Picture'] = roi
-            result['From'] = ''.join(self.Prefecture[result['List'][0]][result['List'][1]])
-            return result
+        if card_imgs is None:
+            return
         else:
-            return None
+            predict_result, roi, card_color = self.__identification(card_imgs, colors)
+            if predict_result != []:
+                result['UseTime'] = round((time.time() - start), 2)
+                result['InputTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+                result['Type'] = self.cardtype[card_color]
+                result['List'] = predict_result
+                result['Number'] = ''.join(predict_result[:2]) + '·' + ''.join(predict_result[2:])
+                result['Picture'] = roi
+                try:
+                    result['From'] = ''.join(self.Prefecture[result['List'][0]][result['List'][1]])
+                except:
+                    result['From'] = '未知'
+                return result
+            else:
+                return None
 
 
 if __name__ == '__main__':
     c = PlateRecognition()
-    result = c.vehicleLicensePlateRecognition("蒙AGX468.jpg")
-    print()
-    print(result['List'])
-    print(result['Type'])
-    #cv2.waitKey(0)
+    result = c.VLPR("./test/蒙AGX468.jpg")
+    print(result)
+    # print(result['List'])
+    # print(result['Type'])
+    cv2.waitKey(0)

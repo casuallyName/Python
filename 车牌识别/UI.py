@@ -7,8 +7,10 @@
 # WARNING! All changes made in this file will be lost!
 
 import sys, os, cv2, xlwt
+import numpy as np
 from PyQt5.QtWidgets import *
 from Recognition import PlateRecognition
+from PyQt5.QtGui import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -68,7 +70,8 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderLabels(["图片名称", "录入时间", "识别耗时", "车牌号码", "车牌类型", "车牌信息"])
         self.tableWidget.setRowCount(self.RowLength)
         self.tableWidget.verticalHeader().setVisible(False)  # 隐藏垂直表头)
-        self.tableWidget.setStyleSheet("selection-background-color:pink")
+        # self.tableWidget.setStyleSheet("selection-background-color:blue")
+        # self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.raise_()
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_1)
@@ -141,7 +144,6 @@ class Ui_MainWindow(object):
     # 识别
     def __vlpr(self, path):
         PR = PlateRecognition()
-        print('000')
         result = PR.VLPR(path)
         return result
 
@@ -156,6 +158,12 @@ class Ui_MainWindow(object):
         self.tableWidget.setItem(self.RowLength - 1, 2, QTableWidgetItem(str(result['UseTime']) + '秒'))
         self.tableWidget.setItem(self.RowLength - 1, 3, QTableWidgetItem(result['Number']))
         self.tableWidget.setItem(self.RowLength - 1, 4, QTableWidgetItem(result['Type']))
+        if result['Type'] == '蓝色牌照':
+            self.tableWidget.item(self.RowLength - 1, 4).setBackground(QBrush(QColor(3, 128, 255)))
+        elif result['Type'] == '绿色牌照':
+            self.tableWidget.item(self.RowLength - 1, 4).setBackground(QBrush(QColor(98, 198, 148)))
+        elif result['Type'] == '黄色牌照':
+            self.tableWidget.item(self.RowLength - 1, 4).setBackground(QBrush(QColor(242, 202, 9)))
         self.tableWidget.setItem(self.RowLength - 1, 5, QTableWidgetItem(result['From']))
 
         # 显示识别到的车牌位置
@@ -196,11 +204,24 @@ class Ui_MainWindow(object):
 
     def __openimage(self):
         path, filetype = QFileDialog.getOpenFileName(None, "选择文件", self.ProjectPath,
-                                                     "JPEG Files (*.jpg);;PNG Files (*.png)")  # ;;All Files (*)
+                                                     "JPEG Image (*.jpg);;PNG Image (*.png);;JFIF Image (*.jfif)")  # ;;All Files (*)
         if path == "":  # 未选择文件
             return
         filename = path.split('/')[-1]
-        jpg = QtGui.QPixmap(path).scaled(self.label.width(), self.label.height())
+
+        # 尺寸适配
+        size = cv2.cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR).shape
+        if size[0]/size[1]>1.0907:
+            w = size[1]*self.label.height()/size[0]
+            h = self.label.height()
+            jpg = QtGui.QPixmap(path).scaled(w, h)
+        elif size[0] / size[1] < 1.0907:
+            w = self.label.width()
+            h = size[0]* self.label.width()/ size[1]
+            jpg = QtGui.QPixmap(path).scaled(w, h)
+        else:
+            jpg = QtGui.QPixmap(path).scaled(self.label.width(), self.label.height())
+
         self.label.setPixmap(jpg)
         result = self.__vlpr(path)
         if result is not None:
