@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import cv2
 import numpy as np
 from numpy.linalg import norm
@@ -773,7 +775,7 @@ class PlateRecognition():
                 car_contours.append(rect)
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)
-            # oldimg = cv2.drawContours(oldimg, [box], 0, (0, 0, 255), 2)
+            # oldimg = cv2.drawContours(img, [box], 0, (0, 0, 255), 2)
             # cv2.imshow("Test",oldimg )
             # print(car_contours)
 
@@ -926,6 +928,12 @@ class PlateRecognition():
         for i, color in enumerate(colors):
             if color in ("blue", "yellow", "green"):
                 card_img = card_imgs[i]
+                #old_img = card_img
+                # 做一次锐化处理
+                kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]], np.float32)  # 锐化
+                card_img = cv2.filter2D(card_img, -1, kernel=kernel)
+                # cv2.imshow("custom_blur", card_img)
+
                 # RGB转GARY
                 gray_img = cv2.cvtColor(card_img, cv2.COLOR_BGR2GRAY)
                 # cv2.imshow('gray_img', gray_img)
@@ -1044,7 +1052,7 @@ class PlateRecognition():
                             if part_card_old.shape[0] / part_card_old.shape[1] >= 7:  # 1太细，认为是边缘
                                 continue
                     predict_result.append(charactor)
-                roi = card_img
+                roi = card_img#old_img
                 card_color = color
                 break
 
@@ -1055,6 +1063,8 @@ class PlateRecognition():
         start = time.time()
         self.train_svm()
         card_imgs, colors = self.__preTreatment(car_pic)
+        # cv2.imshow('card_imgs', card_imgs[0])
+        # print(colors)
         if card_imgs is None:
             return
         else:
@@ -1079,7 +1089,8 @@ class PlateRecognition():
         start = time.time()
         self.train_svm()
         card_imgs, colors = self.__preTreatment(car_pic)
-        if card_imgs is None:
+        if card_imgs is []:
+            print('000')
             return
         else:
             predict_result, roi, card_color = self.__identification(card_imgs, colors)
@@ -1099,10 +1110,9 @@ class PlateRecognition():
                 return None
 
 
+# 测试
 if __name__ == '__main__':
     c = PlateRecognition()
-    result = c.VLPR("./test/蒙AGX468.jpg")
+    result = c.vehicleLicensePlateRecognition('01.jpg')  # "./test/蒙AGX468.jpg")
     print(result)
-    # print(result['List'])
-    # print(result['Type'])
     cv2.waitKey(0)

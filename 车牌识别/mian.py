@@ -8,10 +8,12 @@
 
 import sys, os, cv2, xlwt
 import numpy as np
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import *
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from Recognition import PlateRecognition
-from PyQt5.QtGui import *
-from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 
 class Ui_MainWindow(object):
@@ -23,6 +25,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1213, 670)
+        MainWindow.setFixedSize(1213, 670)      # 设置窗体固定大小
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -42,6 +45,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         self.label.setGeometry(QtCore.QRect(10, 40, 481, 441))
         self.label.setObjectName("label")
+        self.label.setAlignment(Qt.AlignCenter)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.scrollArea_2 = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea_2.setGeometry(QtCore.QRect(10, 10, 671, 631))
@@ -57,7 +61,7 @@ class Ui_MainWindow(object):
         self.label_1.setFont(font)
         self.label_1.setObjectName("label_1")
         self.tableWidget = QtWidgets.QTableWidget(self.scrollAreaWidgetContents_1)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 651, 581))
+        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 651, 581))#581))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(6)
         self.tableWidget.setColumnWidth(0, 140)  # 设置1列的宽度
@@ -150,7 +154,7 @@ class Ui_MainWindow(object):
     def __show(self, result, FileName):
         # 显示表格
         self.RowLength = self.RowLength + 1
-        if self.RowLength > 19:
+        if self.RowLength > 18:
             self.tableWidget.setColumnWidth(5, 157)
         self.tableWidget.setRowCount(self.RowLength)
         self.tableWidget.setItem(self.RowLength - 1, 0, QTableWidgetItem(FileName))
