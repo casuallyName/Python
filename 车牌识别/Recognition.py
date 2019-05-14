@@ -42,45 +42,19 @@ class PlateRecognition():
         self.MAX_WIDTH = 1000  # 原始图片最大宽度
         self.Min_Area = 2000  # 车牌区域允许最大面积
         self.PROVINCE_START = 1000
-        self.provinces = [
-            "zh_cuan", "川",
-            "zh_e", "鄂",
-            "zh_gan", "赣",
-            "zh_gan1", "甘",
-            "zh_gui", "贵",
-            "zh_gui1", "桂",
-            "zh_hei", "黑",
-            "zh_hu", "沪",
-            "zh_ji", "冀",
-            "zh_jin", "津",
-            "zh_jing", "京",
-            "zh_jl", "吉",
-            "zh_liao", "辽",
-            "zh_lu", "鲁",
-            "zh_meng", "蒙",
-            "zh_min", "闽",
-            "zh_ning", "宁",
-            "zh_qing", "靑",
-            "zh_qiong", "琼",
-            "zh_shan", "陕",
-            "zh_su", "苏",
-            "zh_sx", "晋",
-            "zh_wan", "皖",
-            "zh_xiang", "湘",
-            "zh_xin", "新",
-            "zh_yu", "豫",
-            "zh_yu1", "渝",
-            "zh_yue", "粤",
-            "zh_yun", "云",
-            "zh_zang", "藏",
-            "zh_zhe", "浙"
-        ]
 
-        with open('cardtype.pkl', 'rb') as f:
-            self.cardtype = pickle.load(f)
-        # 字母所代表的地区保存在pkl中，便于更新
-        with open('Prefecture.pkl', 'rb') as f:
-            self.Prefecture = pickle.load(f)
+        # 省份代码保存在provinces.json中
+        with open('provinces.json', 'r', encoding='utf-8') as f:
+            self.provinces = json.load(f)
+
+        # 车牌类型保存在cardtype.json中，便于调整
+        with open('cardtype.json', 'r', encoding='utf-8') as f:
+            self.cardtype = json.load(f)
+
+        # 字母所代表的地区保存在Prefecture.json中，便于更新
+        with open('Prefecture.json', 'r', encoding='utf-8') as f:
+            self.Prefecture = json.load(f)
+
         # 车牌识别的部分参数保存在js中，便于根据图片分辨率做调整
         f = open('config.js')
         j = json.load(f)
@@ -88,8 +62,6 @@ class PlateRecognition():
             if c["open"]:
                 self.cfg = c.copy()
                 break
-        else:
-            raise RuntimeError('没有设置有效配置参数')
 
     def __del__(self):
         self.save_traindata()
@@ -474,7 +446,7 @@ class PlateRecognition():
         for i, color in enumerate(colors):
             if color in ("blue", "yellow", "green"):
                 card_img = card_imgs[i]
-                #old_img = card_img
+                # old_img = card_img
                 # 做一次锐化处理
                 kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]], np.float32)  # 锐化
                 card_img = cv2.filter2D(card_img, -1, kernel=kernel)
@@ -598,7 +570,7 @@ class PlateRecognition():
                             if part_card_old.shape[0] / part_card_old.shape[1] >= 7:  # 1太细，认为是边缘
                                 continue
                     predict_result.append(charactor)
-                roi = card_img#old_img
+                roi = card_img  # old_img
                 card_color = color
                 break
 

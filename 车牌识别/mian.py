@@ -15,7 +15,6 @@ from PyQt5.QtWidgets import *
 from Recognition import PlateRecognition
 
 
-
 class Ui_MainWindow(object):
 
     def __init__(self):
@@ -25,7 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1213, 670)
-        MainWindow.setFixedSize(1213, 670)      # 设置窗体固定大小
+        MainWindow.setFixedSize(1213, 670)  # 设置窗体固定大小
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -61,7 +60,7 @@ class Ui_MainWindow(object):
         self.label_1.setFont(font)
         self.label_1.setObjectName("label_1")
         self.tableWidget = QtWidgets.QTableWidget(self.scrollAreaWidgetContents_1)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 651, 581))#581))
+        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 651, 581))  # 581))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(6)
         self.tableWidget.setColumnWidth(0, 140)  # 设置1列的宽度
@@ -215,13 +214,13 @@ class Ui_MainWindow(object):
 
         # 尺寸适配
         size = cv2.cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR).shape
-        if size[0]/size[1]>1.0907:
-            w = size[1]*self.label.height()/size[0]
+        if size[0] / size[1] > 1.0907:
+            w = size[1] * self.label.height() / size[0]
             h = self.label.height()
             jpg = QtGui.QPixmap(path).scaled(w, h)
         elif size[0] / size[1] < 1.0907:
             w = self.label.width()
-            h = size[0]* self.label.width()/ size[1]
+            h = size[0] * self.label.width() / size[1]
             jpg = QtGui.QPixmap(path).scaled(w, h)
         else:
             jpg = QtGui.QPixmap(path).scaled(self.label.width(), self.label.height())
@@ -252,9 +251,25 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = MainWindow()  # QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+    if os.path.exists('provinces.json'):
+        if os.path.exists('cardtype.json'):
+            if os.path.exists('Prefecture.json'):
+                if os.path.exists('config.js'):
+                    app = QtWidgets.QApplication(sys.argv)
+                    MainWindow = MainWindow()  # QtWidgets.QMainWindow()
+                    ui = Ui_MainWindow()
+                    ui.setupUi(MainWindow)
+                    MainWindow.show()
+                    sys.exit(app.exec_())
+                else:
+                    print('未找到参数文件 config.js')
+                    RuntimeError('未找到参数文件 config.js')
+            else:
+                print('未找到 Prefecture.json 文件')
+                RuntimeError('未找到 Prefecture.json 文件')
+        else:
+            print('未找到 cardtype.json 文件')
+            RuntimeError('未找到 cardtype.json 文件')
+    else:
+        print('未找到 provinces.json 文件')
+        RuntimeError('未找到 provinces.json 文件')
