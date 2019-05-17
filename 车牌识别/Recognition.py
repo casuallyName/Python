@@ -6,7 +6,7 @@ from numpy.linalg import norm
 import os
 import json
 import time
-import pickle
+
 
 
 class StatModel(object):
@@ -254,7 +254,6 @@ class PlateRecognition():
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # cv2.imshow('GaussianBlur', img)
 
-        # 去掉图像中不会是车牌的区域
         kernel = np.ones((20, 20), np.uint8)
         img_opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)  # 开运算
         img_opening = cv2.addWeighted(img, 1, img_opening, -1, 0);  # 与上一次开运算结果融合
@@ -293,6 +292,7 @@ class PlateRecognition():
                 car_contours.append(rect)
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)
+            # 框出所有可能的矩形
             # oldimg = cv2.drawContours(img, [box], 0, (0, 0, 255), 2)
             # cv2.imshow("Test",oldimg )
             # print(car_contours)
@@ -530,7 +530,9 @@ class PlateRecognition():
                 # print(wave_peaks)
                 # 分割牌照字符
                 part_cards = self.__seperate_card(gray_img, wave_peaks)
-                # for i, part_card in enumerate(part_cards):
+
+                # 分割输出
+                #for i, part_card in enumerate(part_cards):
                 #    cv2.imshow(str(i), part_card)
 
                 # 识别
